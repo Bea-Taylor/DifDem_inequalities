@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "dementia_inequalities"
+  site-url: "https://docs.autonomy.work/docs/dementia_inequalities"
+  description: ""
+  repo-branch: main
+  repo-url: "https://github.com/Autonomy-Data-Unit/dementia_inequalities"

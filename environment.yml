@@ -1,0 +1,5 @@
+name: dementia_inequalities
+channels:
+  - defaults
+dependencies:
+  - python=3.10

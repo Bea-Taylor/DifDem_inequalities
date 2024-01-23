@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "dementia-inequalities"
+version = "0.1.0"
+description = "'diagnosis rates by area of deprivation'"
+authors = ["Beatrice Taylor <82382427+Bea-Taylor@users.noreply.github.com>"]
+readme = "README.md"
+include = [
+    { path = "CHANGELOG.md", format = ["sdist", "wheel"] },
+    { path = "README.md", format = ["sdist", "wheel"] }
+]
+exclude = ["dementia_inequalities/store/*"]
+
+
+[tool.poetry.dependencies]
+python = "^3.10,<3.13"
+matplotlib = "^3.8.2"
+pandas = "^2.2.0"
+numpy = "^1.26.3"
+adu-proj = {version = "^0.1.17", source = "adu"}
+pgeocode = "^0.4.1"
+
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+
+[[tool.poetry.source]]
+name = "adu"
+url = "https://pip.autonomy.work"
+priority = "supplemental"
+
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
+nbdev = "^2.3.13"
+adu-tools = {version = "^0.2.45", source = "adu"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

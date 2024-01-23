@@ -1,0 +1,8 @@
+{
+    "bucket" : "adu-project-data",
+    "parent_prefix" : "dementia_inequalities",
+
+    "fetch" : {
+		"store/data/" : "store/data/"
+    }
+}
