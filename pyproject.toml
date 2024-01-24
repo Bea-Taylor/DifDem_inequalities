@@ -18,6 +18,7 @@ pandas = "^2.2.0"
 numpy = "^1.26.3"
 adu-proj = {version = "^0.1.17", source = "adu"}
 pgeocode = "^0.4.1"
+openpyxl = "^3.1.2"
 
 
 [[tool.poetry.source]]
