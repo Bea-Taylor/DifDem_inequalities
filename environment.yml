@@ -3,3 +3,4 @@ channels:
   - defaults
 dependencies:
   - python=3.10
+  - scikit-learn=1.4.0
