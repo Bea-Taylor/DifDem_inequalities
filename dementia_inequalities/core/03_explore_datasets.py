@@ -11,3 +11,5 @@ import adu_proj.utils as adutils
 # %% ../../nbs/core/03_explore_datasets.ipynb 5
 import numpy as np 
 import pandas as pd 
+import matplotlib as plt
+from sklearn import linear_model
