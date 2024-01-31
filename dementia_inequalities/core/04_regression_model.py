@@ -13,9 +13,5 @@ import numpy as np
 import pandas as pd 
 from matplotlib import pyplot as plt
 from sklearn import linear_model
-from sklearn.model_selection import KFold
-
-import statsmodels.api as sm 
-from statsmodels.formula.api import ols
-from statsmodels.stats.outliers_influence import variance_inflation_factor
-from statsmodels.tools.tools import add_constant
+from sklearn.model_selection import KFold, cross_val_score
+import itertools
