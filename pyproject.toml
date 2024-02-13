@@ -20,6 +20,9 @@ adu-proj = {version = "^0.1.17", source = "adu"}
 pgeocode = "^0.4.1"
 openpyxl = "^3.1.2"
 geopandas = "^0.14.2"
+pyarrow = "^15.0.0"
+pyro-ppl = "^1.8.6"
+torch = "^2.2.0"
 
 
 [[tool.poetry.source]]
