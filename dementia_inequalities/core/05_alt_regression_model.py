@@ -14,6 +14,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn import linear_model
 from sklearn.model_selection import KFold, cross_val_score
+from sklearn.linear_model import LinearRegression
 
 # pymc
 import pymc as pm
