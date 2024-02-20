@@ -16,10 +16,12 @@ from sklearn import linear_model
 from sklearn.model_selection import KFold, cross_val_score
 import itertools
 
-# %% ../../nbs/core/04_regression_model.ipynb 8
+import scipy.stats as st
+
+# %% ../../nbs/core/04_regression_model.ipynb 9
 df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
 
-# %% ../../nbs/core/04_regression_model.ipynb 11
+# %% ../../nbs/core/04_regression_model.ipynb 12
 # Potential covariates 
 covar_opt = ['over_65_pc', 'female_pc', 'ALevel_plus_pc', 'white_pc', 'HYP_afflicted_pc', 'DM_afflicted_pc', 'STIA_afflicted_pc']
 
@@ -40,7 +42,6 @@ key_num = 0
 for i in range(1,8):
     for j, subset in enumerate(itertools.combinations(covar_opt, i)):
         covar_comb[key_num] = subset
-        #print(subset)
         X_data = df_dem_plus[list(subset)].values.reshape(-1,i)
         # evaluate the model using 5-fold CV 
         scores = cross_val_score(model, X=X_data, y=Y_data, cv=cv_kfold)
