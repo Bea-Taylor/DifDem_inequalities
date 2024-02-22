@@ -23,7 +23,7 @@ df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
 
 # %% ../../nbs/core/04_regression_model.ipynb 12
 # Potential covariates 
-covar_opt = ['over_65_pc', 'female_pc', 'ALevel_plus_pc', 'white_pc', 'HYP_afflicted_pc', 'DM_afflicted_pc', 'STIA_afflicted_pc']
+covar_opt = ['over_65_pc', 'female_pc', 'ALevel_plus_pc', 'white_pc', 'HYP_afflicted_pc', 'DM_afflicted_pc', 'STIA_afflicted_pc', 'GP_LAD_pc']
 
 # Outcome data 
 Y_data = df_dem_plus['DEM_afflicted_pc'].values.reshape(-1,1)
@@ -39,7 +39,7 @@ covar_comb = {}
 perform_by_covar = {}
 
 key_num = 0
-for i in range(1,8):
+for i in range(1,9):
     for j, subset in enumerate(itertools.combinations(covar_opt, i)):
         covar_comb[key_num] = subset
         X_data = df_dem_plus[list(subset)].values.reshape(-1,i)
