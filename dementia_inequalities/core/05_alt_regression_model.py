@@ -36,19 +36,21 @@ def log_norm_mode(mu:int, # mean of the variables log
 # %% ../../nbs/core/05_ml_custom_regression_model.ipynb 11
 # Define the log likelihood function for linear regression with log-normal error
 def log_likelihood(params, X, y):
-    beta = params[:-2]
+    beta_0 = params[0]
+    beta = params[1:-2]
     mu = params[-2]
     sigma = params[-1]
-    y_pred = np.dot(X, beta) # this is the shift 
+    y_pred = np.dot(X, beta) + beta_0 # this is the shift 
     likelihood = shift_log_normal_pdf(y, delta=y_pred, mu=mu, sigma=sigma)
     return np.sum(np.log(likelihood))
 
 # Define the prior distribution for beta parameters, mu, and sigma
 def log_prior(params):
-    beta = params[:-2]
+    beta_0 = params[0]
+    beta = params[1:-2]
     mu = params[-2]
     sigma = params[-1]
-    if np.all(-10 < beta.all() < 10) and 0 <= mu < 10 and sigma > 0:
+    if -10 < beta_0 < 10 and np.all(-10 < beta.all() < 10) and 0 <= mu < 10 and sigma > 0:
         return 0
     return -np.inf
 
@@ -70,7 +72,7 @@ def metropolis_hastings(initial_params, proposal_sd, n_iter, X, y):
         accepted_post.append(log_posterior(params, X, y))
     return np.array(accepted_params), np.array(accepted_post)
 
-# %% ../../nbs/core/05_ml_custom_regression_model.ipynb 19
+# %% ../../nbs/core/05_ml_custom_regression_model.ipynb 20
 df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
 
 df_dem_plus.head()
