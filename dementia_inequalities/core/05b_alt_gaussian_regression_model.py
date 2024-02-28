@@ -16,7 +16,7 @@ from matplotlib import pyplot as plt
 from scipy.stats import norm 
 
 
-# %% ../../nbs/core/05b_alt_gaussian_regression_model.ipynb 9
+# %% ../../nbs/core/05b_alt_gaussian_regression_model.ipynb 8
 # Define the log likelihood function for linear regression with normal error
 def log_likelihood(params, X, y):
     beta_0 = params[0]
@@ -25,7 +25,7 @@ def log_likelihood(params, X, y):
     sigma = params[-1]
 
     y_pred = np.dot(X, beta) + beta_0 
-    y_diff = y-y_pred.squeeze()
+    y_diff = y_pred.squeeze()-y
     likelihood = norm.pdf(x=y_diff, loc=mu, scale=sigma)
     
     return np.sum(np.log(likelihood))
@@ -36,7 +36,8 @@ def log_prior(params):
     beta = params[1:-2]
     mu = params[-2]
     sigma = params[-1]
-    if all(-5 < b < 5 for b in beta) and 0 <= beta_0 < 5 and 0 < mu < 5 and 0 < sigma :
+    if all(-1 < b < 1 for b in beta) and 0 <= beta_0 < 1 and 0 < mu < 1 and 0 < sigma < 1 :
+    #if all(-5 < b < 5 for b in beta) and 0 <= beta_0 < 5 and 0 < mu < 5 and 0 < sigma :
     #if all(-5 < b < 5 for b in beta) and 0 <= beta_0 < 5 and -5 < mu < 0 and 0 < sigma :
         return 0
     return -np.inf
@@ -59,7 +60,7 @@ def metropolis_hastings(initial_params, proposal_sd, n_iter, X, y):
         accepted_post.append(log_posterior(params, X, y))
     return np.array(accepted_params), np.array(accepted_post)
 
-# %% ../../nbs/core/05b_alt_gaussian_regression_model.ipynb 17
+# %% ../../nbs/core/05b_alt_gaussian_regression_model.ipynb 15
 df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
 
 df_dem_plus.head()

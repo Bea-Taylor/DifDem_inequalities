@@ -23,21 +23,14 @@ def shift_log_normal_pdf(x:np.array,
                          delta:int, # shift parameter
                          mu:int, # mean of the variables log
                          sigma:int): # standard deviation of the variables log
-    #print(f'x shape:{x.shape}')
     if isinstance(delta, int) or isinstance(delta, float):
         delta = delta*np.ones(len(x)).T
     else:
         delta=delta.T
     mu = mu*np.ones(len(x)).T
-    #print(f'shape of delta:{delta.shape}')
     x_shift = np.subtract(x.squeeze(), delta.squeeze())
-    #print(f'shifted x shape: {x_shift.shape}')
     norm_const = 1/((x_shift)*sigma*np.sqrt(2*np.pi))
-    #print(f'norm constant: {norm_const.shape}')
     exp_part = np.exp(-(1/(2*sigma**2))*(np.log(np.subtract(x_shift.squeeze(), mu.squeeze()))**2))
-    #print(f'exp_part:{exp_part.shape}')
-    #print(f'{(np.log(np.subtract(x_shift.squeeze(), mu.squeeze()))**2).shape}')
-    #print(f'dim log like: {(norm_const*exp_part).shape}')
     return norm_const*exp_part
 
 
@@ -53,9 +46,7 @@ def log_likelihood(params, X, y):
     mu = params[-2]
     sigma = params[-1]
     y_pred = np.dot(X, beta) + beta_0 # this is the shift 
-    #print(f'shape of y_pred:{y_pred.shape}')
     likelihood = shift_log_normal_pdf(y, delta=y_pred, mu=mu, sigma=sigma)
-    #print(f'likelihood dim: {likelihood.shape}')
     return np.nansum(np.log(likelihood))
 
 # Define the prior distribution for beta parameters, mu, and sigma
@@ -87,7 +78,7 @@ def metropolis_hastings(initial_params, proposal_sd, n_iter, X, y):
         accepted_post.append(log_posterior(params, X, y))
     return np.array(accepted_params), np.array(accepted_post)
 
-# %% ../../nbs/core/05_ml_custom_regression_model.ipynb 22
+# %% ../../nbs/core/05_ml_custom_regression_model.ipynb 21
 df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
 
 df_dem_plus.head()
