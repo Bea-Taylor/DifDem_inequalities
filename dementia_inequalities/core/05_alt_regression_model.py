@@ -23,9 +23,21 @@ def shift_log_normal_pdf(x:np.array,
                          delta:int, # shift parameter
                          mu:int, # mean of the variables log
                          sigma:int): # standard deviation of the variables log
-    x_shift = x-delta
+    #print(f'x shape:{x.shape}')
+    if isinstance(delta, int) or isinstance(delta, float):
+        delta = delta*np.ones(len(x)).T
+    else:
+        delta=delta.T
+    mu = mu*np.ones(len(x)).T
+    #print(f'shape of delta:{delta.shape}')
+    x_shift = np.subtract(x.squeeze(), delta.squeeze())
+    #print(f'shifted x shape: {x_shift.shape}')
     norm_const = 1/((x_shift)*sigma*np.sqrt(2*np.pi))
-    exp_part = np.exp(-(1/(2*sigma**2))*(np.log(x_shift)-mu)**2)
+    #print(f'norm constant: {norm_const.shape}')
+    exp_part = np.exp(-(1/(2*sigma**2))*(np.log(np.subtract(x_shift.squeeze(), mu.squeeze()))**2))
+    #print(f'exp_part:{exp_part.shape}')
+    #print(f'{(np.log(np.subtract(x_shift.squeeze(), mu.squeeze()))**2).shape}')
+    #print(f'dim log like: {(norm_const*exp_part).shape}')
     return norm_const*exp_part
 
 
@@ -33,7 +45,7 @@ def log_norm_mode(mu:int, # mean of the variables log
                   sigma:int): # standard deviation of the variables log
     return np.exp(mu - sigma**2)
 
-# %% ../../nbs/core/05_ml_custom_regression_model.ipynb 11
+# %% ../../nbs/core/05_ml_custom_regression_model.ipynb 12
 # Define the log likelihood function for linear regression with log-normal error
 def log_likelihood(params, X, y):
     beta_0 = params[0]
@@ -41,8 +53,10 @@ def log_likelihood(params, X, y):
     mu = params[-2]
     sigma = params[-1]
     y_pred = np.dot(X, beta) + beta_0 # this is the shift 
+    #print(f'shape of y_pred:{y_pred.shape}')
     likelihood = shift_log_normal_pdf(y, delta=y_pred, mu=mu, sigma=sigma)
-    return np.sum(np.log(likelihood))
+    #print(f'likelihood dim: {likelihood.shape}')
+    return np.nansum(np.log(likelihood))
 
 # Define the prior distribution for beta parameters, mu, and sigma
 def log_prior(params):
@@ -50,7 +64,8 @@ def log_prior(params):
     beta = params[1:-2]
     mu = params[-2]
     sigma = params[-1]
-    if -10 < beta_0 < 10 and np.all(-10 < beta.all() < 10) and 0 <= mu < 10 and sigma > 0:
+    #if 0 <= beta_0 and np.all(-10 < beta.all() < 10) and 0 <= mu < 10 and sigma > 0:
+    if all(-10 < b < 10 for b in beta) and 0 <= beta_0 < 10 and -10 < mu < 10 and sigma > 0:
         return 0
     return -np.inf
 
@@ -72,7 +87,7 @@ def metropolis_hastings(initial_params, proposal_sd, n_iter, X, y):
         accepted_post.append(log_posterior(params, X, y))
     return np.array(accepted_params), np.array(accepted_post)
 
-# %% ../../nbs/core/05_ml_custom_regression_model.ipynb 20
+# %% ../../nbs/core/05_ml_custom_regression_model.ipynb 22
 df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
 
 df_dem_plus.head()
