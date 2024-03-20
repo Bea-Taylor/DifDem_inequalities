@@ -15,6 +15,8 @@ from matplotlib import pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.colors import TwoSlopeNorm
 
+from scipy.stats import pearsonr
+
 import geopandas as gpd
 
 # %% ../../nbs/core/06_comparison_across_measures.ipynb 6
