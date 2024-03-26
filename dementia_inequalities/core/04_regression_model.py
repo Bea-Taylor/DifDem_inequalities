@@ -14,12 +14,13 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.colors import TwoSlopeNorm
+import matplotlib.font_manager as fm
 
-from scipy.stats import pearsonr
+from scipy.stats import pearsonr, spearmanr
 
 import geopandas as gpd
 
-# %% ../../nbs/core/06_comparison_across_measures.ipynb 6
+# %% ../../nbs/core/06_comparison_across_measures.ipynb 7
 df_reg_model = pd.read_csv(const.output_path+'/reg_model/reg_model_results.csv')
 df_IMD_reg_model = pd.read_csv(const.output_path+'/test_set_reg_model/IMD_reg_model_results.csv')
 df_GP_reg_model = pd.read_csv(const.output_path+'/test_set_reg_model/GP_reg_model_results.csv')

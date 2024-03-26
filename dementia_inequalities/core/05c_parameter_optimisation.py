@@ -16,10 +16,10 @@ from fastcore.test import *
 
 from .. import const, log, utils, tools 
 
-# %% ../../nbs/core/05c_optimise_function.ipynb 5
+# %% ../../nbs/core/05c_optimise_function.ipynb 6
 df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
 
-# %% ../../nbs/core/05c_optimise_function.ipynb 7
+# %% ../../nbs/core/05c_optimise_function.ipynb 9
 # The real dementia x and y data 
 
 # covariates 
@@ -31,7 +31,7 @@ x = np.array(df_dem_plus[covar].values.reshape(-1,len(covar)))
 # Outcome data 
 y = np.array(df_dem_plus['DEM_afflicted_pc'].values.reshape(-1,1))
 
-# %% ../../nbs/core/05c_optimise_function.ipynb 9
+# %% ../../nbs/core/05c_optimise_function.ipynb 11
 # This is the function to use for plotting 
 def reverse_shift_log_normal_pdf(x, delta, mu, sigma):
     pdf = []
@@ -50,7 +50,7 @@ def log_norm_mode(mu:int, # mean of the variables log
                   sigma:int): # standard deviation of the variables log
     return np.exp(mu - sigma**2)
 
-# %% ../../nbs/core/05c_optimise_function.ipynb 12
+# %% ../../nbs/core/05c_optimise_function.ipynb 14
 def log_rvs_shift_log_normal(z, # random variable
                              delta, # the shift parameter
                              mu, # mean of the logarithm of z
@@ -83,13 +83,13 @@ def neg_loglike(params, # parameters to optimise
     
     return (-1 * np.sum(log_likely)).squeeze()
 
-# %% ../../nbs/core/05c_optimise_function.ipynb 24
+# %% ../../nbs/core/05c_optimise_function.ipynb 26
 # Use scipy's minimize function with the Nelder-Mead algorithm
 result = minimize(neg_loglike, x0=params_0, args=(x,y), method = 'Nelder-Mead')
 
 result
 
-# %% ../../nbs/core/05c_optimise_function.ipynb 27
+# %% ../../nbs/core/05c_optimise_function.ipynb 29
 # Extract the MLE from the parameter samples
 MLE_params = result.x
 

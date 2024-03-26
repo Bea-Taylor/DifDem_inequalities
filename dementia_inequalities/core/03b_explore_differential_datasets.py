@@ -12,9 +12,10 @@ import adu_proj.utils as adutils
 import numpy as np 
 import pandas as pd 
 from matplotlib import pyplot as plt
+import matplotlib.font_manager as fm
 
 import geopandas as gpd
 
-# %% ../../nbs/core/07_differential_diagnosis_datasets.ipynb 8
+# %% ../../nbs/core/07_differential_diagnosis_datasets.ipynb 10
 df_icb_diff = pd.read_csv(const.data_path+'/differential_diagnosis/pcdem-sicbl-dem-type-dec-2023.csv')
 df_young = pd.read_csv(const.data_path+ '/differential_diagnosis/pcdem-sicbl-incidence-onset-dec-2023.csv')
