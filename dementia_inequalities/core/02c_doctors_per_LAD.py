@@ -12,7 +12,9 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 
-from .. import const
+import dementia_inequalities as proj
+from .. import const, log, utils, tools
+import adu_proj.utils as adutils
 
 from sklearn import linear_model
 
@@ -129,3 +131,12 @@ df_LAD_GP_count['GP_contribution_to_LAD'] = df_LAD_GP_count['percent_GP_in_LAD']
 df_LAD_GP = df_LAD_GP_count[['LAD_name', 'GP_code', 'gp_name', 'intersection_size', 'intersection_pop', 'percent_GP_in_LAD', 'GP_count_regression_imputed', 'GP_contribution_to_LAD']]
 df_LAD_GP.reset_index(inplace=True, drop=True)
 df_LAD_GP.columns = ['LAD_name', 'GP_code', 'GP_name', 'area_intersection', 'pop_intersection', 'percent_GP_in_LAD', 'GP_count_practice_imputed', 'GP_contribution_to_LAD']
+
+# %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 32
+df_GP_contribution = df_LAD_GP.groupby('LAD_name').sum()
+df_GP_contribution.reset_index(inplace=True)
+df_GP_contribution = df_GP_contribution[['LAD_name', 'GP_contribution_to_LAD']]
+
+# %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 35
+# save the dataframe 
+df_GP_contribution.to_csv(const.pre_output_path+'/GP_contribution_LAD.csv', index=False)
