@@ -3,7 +3,8 @@
 # %% auto 0
 __all__ = ['df_LAD_GP_pop', 'df_GP_count', 'list_gps', 'list_gps_codes', 'df_LAD_GP_count', 'df_LAD_GP', 'df_GP_contribution',
            'df_QOF_prev', 'df_QOF_dem', 'with_GP_count', 'with_no_GP_count', 'x', 'x_train', 'y_train', 'regr',
-           'y_pred', 'test_y_pred', 'resid_std', 'hetero_noise', 'y']
+           'y_pred', 'test_y_pred', 'resid', 'resid_std', 'hetero_noise', 'log_y', 'y', 'x1', 'x1_train', 'y1_train',
+           'y1_pred', 'resid1']
 
 # %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 5
 import numpy as np
@@ -72,19 +73,12 @@ with_no_GP_count = df_QOF_dem[~(df_QOF_dem['GP Count']>0)]
 # %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 26
 # Random regression imputation with heteroskedastic error term 
 
-# Remove datapoints where the number of doctors is over 2 deviations away from the mean
-#GP_mean = np.mean(with_GP_count['GP Count'].values)
-#GP_std = np.std(with_GP_count['GP Count'].values)
-#GP_upper_lim = GP_mean + 3*GP_std
-
-#with_GP_no_outliers = with_GP_count[with_GP_count['GP Count']<GP_upper_lim]
+# original
+x = np.log(df_QOF_dem['PRACTICE_LIST_SIZE'].values.reshape(-1,1))
 
 # original
-x = df_QOF_dem['PRACTICE_LIST_SIZE'].values.reshape(-1,1)
-
-# original
-x_train = with_GP_count['PRACTICE_LIST_SIZE'].values.reshape(-1,1)
-y_train =  with_GP_count['GP Count'].values.reshape(-1,1)
+x_train = np.log(with_GP_count['PRACTICE_LIST_SIZE'].values.reshape(-1,1))
+y_train =  np.log(with_GP_count['GP Count'].values.reshape(-1,1))
 
 # fit regression
 regr = linear_model.LinearRegression()
@@ -94,27 +88,65 @@ y_pred = regr.predict(x_train)
 test_y_pred = regr.predict(x)
 
 # calculate std of variance between predicted data and observed data 
+resid = y_train-y_pred
 resid_std = np.std(np.abs(y_train-y_pred))
 # calculate hetero-skedastic noise
 np.random.seed(3)
-hetero_noise = 0.00005*np.abs(x) * np.random.normal(loc=0, scale=resid_std, size=x.shape)
+hetero_noise = np.random.normal(loc=0, scale=resid_std, size=x.shape)
 
 # the imputed value - regression plus noise
-y = test_y_pred + hetero_noise.reshape(-1,1)
+log_y = test_y_pred + hetero_noise.reshape(-1,1)
+y = np.ceil(np.exp(log_y))
 
 # plot 
 plt.figure(figsize=(10, 9), dpi=200)
 plt.scatter(x_train, y_train, color = 'xkcd:boring green', alpha=0.5)
 plt.plot(x_train, y_pred, color='xkcd:deep lilac', linewidth=2)
-plt.scatter(x, y, color='xkcd:windows blue', alpha=0.5)
-plt.xlabel('GP practice size', fontsize=16)
-plt.ylabel('Number of doctors', fontsize=16)
+plt.scatter(x, log_y, color='xkcd:windows blue', alpha=0.5)
+plt.xlabel('log GP practice size', fontsize=16)
+plt.ylabel('log Number of doctors', fontsize=16)
 plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
-plt.legend(['training data', 'regression line', 'random imputed data'], loc='lower right', fontsize=16)
-plt.savefig(const.figs_path+'/GP_data_imputation.png')
+plt.legend(['log training data', 'regression line', 'log random imputed data'], loc='lower right', fontsize=16)
+plt.savefig(const.figs_path+'/GP_data_imputation_regr.png')
 
 # %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 27
+# Plot the residuals 
+
+# No log
+x1 = df_QOF_dem['PRACTICE_LIST_SIZE'].values.reshape(-1,1)
+x1_train = with_GP_count['PRACTICE_LIST_SIZE'].values.reshape(-1,1)
+y1_train =  with_GP_count['GP Count'].values.reshape(-1,1)
+
+# fit regression
+regr = linear_model.LinearRegression()
+regr.fit(x1_train, y1_train)
+y1_pred = regr.predict(x1_train)
+resid1 = y1_train-y1_pred
+
+plt.figure(figsize=(10, 5), dpi=200)
+
+# plot 1 - original residual
+plt.subplot(1, 2, 1)
+plt.scatter(x1_train, resid1, color = 'xkcd:boring green', alpha=0.4)
+plt.plot(x1_train, np.zeros(len(x1_train)), color='xkcd:deep lilac', linewidth=2)
+plt.xlabel('GP practice size', fontsize=16)
+plt.ylabel('Residuals', fontsize=16)
+plt.xticks(fontsize=12, rotation=45, ha='right')
+plt.yticks(fontsize=12)
+
+# plot 2 - residual after taking log 
+plt.subplot(1, 2, 2)
+plt.scatter(x_train, resid, color = 'xkcd:boring green', alpha=0.4)
+plt.plot(x_train, np.zeros(len(x_train)), color='xkcd:deep lilac', linewidth=2)
+plt.xlabel('log GP practice size', fontsize=16)
+plt.xticks(fontsize=12, rotation=45, ha='right')
+plt.yticks(fontsize=12)
+
+plt.savefig(const.figs_path+'/GP_data_residual.png')
+plt.show()
+
+# %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 29
 # update missing values in dataframe 
 df_QOF_dem['GP_count_random_imputed_missing'] = y
 
@@ -122,7 +154,7 @@ df_QOF_dem['GP_count_regression_imputed'] = df_QOF_dem['GP Count']
 df_QOF_dem['GP_count_regression_imputed'].fillna(df_QOF_dem['GP_count_random_imputed_missing'], inplace=True)
 df_QOF_dem.drop(columns='GP_count_random_imputed_missing')
 
-# %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 30
+# %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 32
 # load dataset
 df_LAD_GP_count = pd.merge(df_LAD_GP_pop, df_QOF_dem[['PRACTICE_CODE', 'GP_count_regression_imputed']], left_on='GP_code', right_on='PRACTICE_CODE', how='right')
 df_LAD_GP_count['GP_contribution_to_LAD'] = df_LAD_GP_count['percent_GP_in_LAD']*df_LAD_GP_count['GP_count_regression_imputed']
@@ -132,11 +164,11 @@ df_LAD_GP = df_LAD_GP_count[['LAD_name', 'GP_code', 'gp_name', 'intersection_siz
 df_LAD_GP.reset_index(inplace=True, drop=True)
 df_LAD_GP.columns = ['LAD_name', 'GP_code', 'GP_name', 'area_intersection', 'pop_intersection', 'percent_GP_in_LAD', 'GP_count_practice_imputed', 'GP_contribution_to_LAD']
 
-# %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 32
+# %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 34
 df_GP_contribution = df_LAD_GP.groupby('LAD_name').sum()
 df_GP_contribution.reset_index(inplace=True)
 df_GP_contribution = df_GP_contribution[['LAD_name', 'GP_contribution_to_LAD']]
 
-# %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 35
+# %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 37
 # save the dataframe 
 df_GP_contribution.to_csv(const.pre_output_path+'/GP_contribution_LAD.csv', index=False)
