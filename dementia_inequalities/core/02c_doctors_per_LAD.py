@@ -128,9 +128,9 @@ plt.figure(figsize=(10, 5), dpi=200)
 
 # plot 1 - original residual
 plt.subplot(1, 2, 1)
-plt.scatter(x1_train, resid1, color = 'xkcd:boring green', alpha=0.4)
-plt.plot(x1_train, np.zeros(len(x1_train)), color='xkcd:deep lilac', linewidth=2)
-plt.xlabel('GP practice size', fontsize=16)
+plt.scatter(np.log(x1_train), np.log(resid1), color = 'xkcd:boring green', alpha=0.4)
+plt.plot(np.log(x1_train), np.zeros(len(x1_train)), color='xkcd:deep lilac', linewidth=2)
+plt.xlabel('log GP practice size', fontsize=16)
 plt.ylabel('Residuals', fontsize=16)
 plt.xticks(fontsize=12, rotation=45, ha='right')
 plt.yticks(fontsize=12)
@@ -139,11 +139,12 @@ plt.yticks(fontsize=12)
 plt.subplot(1, 2, 2)
 plt.scatter(x_train, resid, color = 'xkcd:boring green', alpha=0.4)
 plt.plot(x_train, np.zeros(len(x_train)), color='xkcd:deep lilac', linewidth=2)
+plt.ylim(-6,4)
 plt.xlabel('log GP practice size', fontsize=16)
 plt.xticks(fontsize=12, rotation=45, ha='right')
 plt.yticks(fontsize=12)
 
-plt.savefig(const.figs_path+'/GP_data_residual.png')
+plt.savefig(const.figs_path+'/log_GP_data_residual.png')
 plt.show()
 
 # %% ../../nbs/core/02c_GP_doctors_per_LAD.ipynb 29

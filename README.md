@@ -4,7 +4,7 @@
 
 ## Context
 
-It has been reported that geography and depravation levels affect
+It has been reported that depravation levels affect
 diagnosis, with [different rates of dementia diagnosis in different
 areas of the UK](https://dementiastatistics.org/about-dementia/maps/).
 Discussions about inequality in Dementia diagnosis and treatment are a
@@ -15,38 +15,23 @@ This work is inspired by the 2021 Alzheimer’s society report into
 [Regional variation: increasing access to a dementia
 diagnosis](https://www.alzheimers.org.uk/sites/default/files/2021-09/regional_variations_increasing_access_to_diagnosis.pdf).
 
-Rates of dementia diagnosis depend on both the prevalence of dementia in
-an area, and a GP practices ability to detect and report new cases.
-Dementia prevalence is itself affected by risk factors including: age,
-sex, ethnicity, socioeconomic background, and modifiable lifestyle
-factors. This has been reported in the literature with:
+This project explored whether we could use publicly available datasets, and some statistical models to investigate how the rate of dementia diagnosis varies across different local authority districts (LADs) in England, specifically in relation to deprivation. 
 
-- [Higher rates of diagnosis in more deprived
-  areas](https://www.cambridge.org/core/journals/primary-health-care-research-and-development/article/variations-in-dementia-diagnosis-in-england-and-association-with-general-practice-characteristics/18A64D2EF4CBEC49874B343C1B41D651),
-  possibly due to higher rate of other health conditions leading to more
-  frequent GP appointments.
-- [Lower rates of diagnosis in more deprived
-  areas](https://link.springer.com/article/10.1186/s12877-022-03086-4)
-- Lower rates of diagnosis in more rural areas, due to difficulty
-  physically attending GP practises/clinics.
-- [Lower rates of diagnosis in single-handed GP
-  practises](https://pubmed.ncbi.nlm.nih.gov/21777080/) (practise with a
-  single doctor) - which in turn are [correlated with more deprived
-  areas.](https://journals.sagepub.com/doi/10.1177/13558196231218830)
+## Notebooks
 
-Depravation levels also affect prevalence.
+Across the notebooks in this repo the datsets are explored, and a variety of modelling approaches developed for dementia underdiagnosis. 
 
-- Higher rates of prevalence due to socio-economic modifiable risk
-  factors (such as level of education).
-- Lower rates of prevalence due to higher rate of comorbidities, which
-  result in fewer people living to older age (age is the largest risk
-  factor for dementia).
+The most relevant notebooks, particularly in reference to the [blog]() are: 
 
-Previous studies have also found a correlation between deprivation and
-the amount of anti-dementia drugs being precribed:
+* `02b_LAD_and_GP_intersections.ipynb` which calculates how the catchment areas for all the GP practices in the QOF overlap with local auhtority districts. 
+* `02c_GP_doctors_per_LAD.ipynb` which imputes the missing data on number of GPs per practice, and calulcate the GP contribution per LAD.
+* `02d_merge_LAD_QOF.ipynb` which merges and cleans the relevant datasets into one dataframe.
+* `03a_explore_datasets.ipynb` which does some initial analysis of the relationship between dependent and independent variables. 
+* `04_regression_model.ipynb` which performs the standard multiple linear regression model. 
+* `04b_regression_model_trained_IMD.ipynb` which performs the standard multiple linear regression model, using various subsets of the data for training. 
+* `05c_optimise_function.ipynb` which defines the log normal (and half normal) error models, and uses scipy.minimize to find the maximum likelihood estimates of the parameters. 
+* `06_comparison_across_measures.ipynb` which conducts analysis of the models, and generates lots of geoplots. 
 
-- [Lower rates of anti-dementia drug prescribing in more deprived
-  areas.](https://watermark.silverchair.com/afv154.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAA6cwggOjBgkqhkiG9w0BBwagggOUMIIDkAIBADCCA4kGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMqDMkBZkmAQ5-UhZIAgEQgIIDWipSED6hj8nfaYU-FjySfvP076ox9BMYagpe0Do8Zpz-mYd-choLiPCIly_yphlr3hRisgyWvfWI9sDvgXf8kJwDUZZJepnz7KK6IDxlpQouejPaSWtHvdiexSaoxaAfnbmX5k2t28Cg16fEpXZcyu2CT-ldkvIWVL0cYbeeUQcYAKw5Lh_-k_7fHbe4dLc6XzxdPl57T8bGWFUmlF7J0LRg4gLbZSfdOWxuZHZvTJCGOYRgbD2uUbNvBH8xtE7o44_nF_ZmP6-JBIRvEaTdgbCYkR4XE8EmTO96npiS3h1O3U5DjmJMl6OzXOApussCm4SWnbnBtu-MAC41mgfKdcAlPmlv7Tq_A9aoIoUK_ryQSee69ciHZvFrNLxTMoRwH1UnzSm_2x_0OvESS4kxBvg5-wXEYOVI7i6saQbRxJdBitv9LCfGiM7hRxkZzZ4zgOBHP_FQvy4sWkQSoFbHauymos1E-Ud9WVlk5oc_8eSD7uj1V9EykNbqxjGWixmx-MIwqCQ5tapWDwS87D6KxWk29NljqLiNX6A3LFBQOptgg7bdfeOt2ev6skT5vef2fS5zPLpg6Ld3lU_nMaNs_QUXuIy7M8SSEZGYrq1X__cr3mqVCHqECtzkBEpRYLuxUQsf2XAQyYf4hcx257aC3yzdgxRs79R1ZywDt6dCLaZjK3EpEeA06ijtrAW3ewu975geNmys-pyhLut2uVVixOgyZxAFjLD-sEqmWv0bvtLcn2IYs89FCRevAt-h4JBXjaoSBg1pt35fyEF6eKFFl6PAYQ9JnUkZHmh3VVM0pBNzVf_ur9DLa3so8Uym6-K6niRoBBGAjpHWKC728ZcL4HmANYk1V9JfOblDkXaEuo0XW4klXtZO6xAmcRh4hSt-VIhXu14NW1UylrxMSrEwNCM8gDItY4ngWwzaZtdP1hBtLuYGImTmevHpuZ0__mDQTWAOIeJxSvDJB5eVvr--zIh9kv7X1vSZqZtvEq0vAxSUSQuUspMpFOUKwW-fUCv3C-v0SH2vKAG4plch2QsXZQZr6u3k1AXkNNA7fnORbrVDPyxpgICF6D_vZbHAymL5-0jgs5eGhirwkm9qYHQNOdlwX1NuSQG6_rRi2E_wZLaz6D4W6NVU5oVaCg)
 
 ## Data sources
 
