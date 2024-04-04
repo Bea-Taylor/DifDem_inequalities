@@ -3,13 +3,33 @@ website:
     contents:
       - index.ipynb
       - const.ipynb
+      - section: blog
+        contents:
+          - blog/dementia_blog_long.ipynb
       - section: cli
         contents:
           - cli/cli_01_core.ipynb
           - cli/cli_02_foo.ipynb
       - section: core
         contents:
-          - core/01_first_steps.ipynb
+          - core/01_prep_QOF_data.ipynb
+          - core/02a_prep_constituency_data.ipynb
+          - core/02b_LAD_and_GP_intersections.ipynb
+          - core/02c_GP_doctors_per_LAD.ipynb
+          - core/02d_merge_LAD_QOF.ipynb
+          - core/03a_explore_datasets.ipynb
+          - core/04_regression_model.ipynb
+          - core/04b_regression_model_trained_IMD.ipynb
+          - core/05_ml_custom_regression_model.ipynb
+          - core/05b_alt_gaussian_regression_model.ipynb
+          - core/05c_optimise_function.ipynb
+          - core/06_comparison_across_measures.ipynb
+          - core/07_differential_diagnosis_datasets.ipynb
+      - section: notes
+        contents:
+          - notes/2024_02_08_non-normal-regression-and-heteroscedasticity.ipynb
+          - notes/2024_14_03_multiple_linear_regression.ipynb
+          - notes/extra_figs.ipynb
       - section: tools
         contents:
           - tools/01_foo.ipynb
