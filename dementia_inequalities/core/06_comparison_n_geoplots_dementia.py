@@ -24,5 +24,5 @@ import geopandas as gpd
 df_reg_model = pd.read_csv(const.output_path+'/reg_model/reg_model_results.csv')
 df_IMD_reg_model = pd.read_csv(const.output_path+'/test_set_reg_model/IMD_reg_model_results.csv')
 df_GP_reg_model = pd.read_csv(const.output_path+'/test_set_reg_model/GP_reg_model_results.csv')
-df_log_norm_model = pd.read_csv(const.output_path+'/log_norm_model/log_norm_model_results.csv')
-df_half_norm_model = pd.read_csv(const.output_path+'/half_norm_model/half_norm_model_results.csv')
+df_log_norm_model = pd.read_csv(const.output_path+'/log_norm_model/log_norm_model_results_no_comor.csv')
+df_half_norm_model = pd.read_csv(const.output_path+'/half_norm_model/half_norm_model_results_no_comor.csv')

@@ -24,7 +24,13 @@ df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
 # The real dementia x and y data 
 
 # covariates 
-covar = ['over_65_pc', 'female_pc', 'ALevel_plus_pc', 'white_pc', 'HYP_afflicted_pc', 'DM_afflicted_pc', 'STIA_afflicted_pc', 'GP_LAD_pc']
+#covar = ['over_65_pc', 'female_pc', 'ALevel_plus_pc', 'white_pc', 'HYP_afflicted_pc', 'DM_afflicted_pc', 'STIA_afflicted_pc', 'GP_LAD_pc']
+
+covar = ['over_65_pc', 
+             'female_pc', 
+             'ALevel_plus_pc', 
+             'white_pc', 
+             'GP_LAD_pc']
 
 # Input data 
 x = np.array(df_dem_plus[covar].values.reshape(-1,len(covar)))
