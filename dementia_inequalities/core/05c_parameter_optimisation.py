@@ -24,8 +24,6 @@ df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
 # The real dementia x and y data 
 
 # covariates 
-#covar = ['over_65_pc', 'female_pc', 'ALevel_plus_pc', 'white_pc', 'HYP_afflicted_pc', 'DM_afflicted_pc', 'STIA_afflicted_pc', 'GP_LAD_pc']
-
 covar = ['over_65_pc', 
              'female_pc', 
              'ALevel_plus_pc', 
@@ -39,7 +37,7 @@ x = np.array(df_dem_plus[covar].values.reshape(-1,len(covar)))
 y = np.array(df_dem_plus['DEM_afflicted_pc'].values.reshape(-1,1))
 
 # %% ../../nbs/core/05c_optimise_function.ipynb 10
-# This is the function to use for plotting 
+# NOTE this is just the function to use for plotting 
 def reverse_shift_log_normal_pdf(x, delta, mu, sigma):
     pdf = []
     for i, x_i in enumerate(x):

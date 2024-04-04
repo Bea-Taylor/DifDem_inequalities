@@ -19,5 +19,5 @@ import itertools
 
 import scipy.stats as st
 
-# %% ../../nbs/core/04b_regression_model_trained_IMD.ipynb 10
+# %% ../../nbs/core/04b_regression_model_trained_IMD.ipynb 9
 df_dem_plus = pd.read_csv(const.output_path+'/df_dem_plus.csv')
